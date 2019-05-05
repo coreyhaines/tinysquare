@@ -3,7 +3,7 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <script>
     function getColor() {
-      var urlParams = new URLSearchParams(window.location.search);
+      const urlParams = new URLSearchParams(window.location.search);
       if(urlParams.has('color')) {
         return "#" + urlParams.get('color');
       }else{
