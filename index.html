@@ -29,7 +29,7 @@
       var urlParams = new URLSearchParams(window.location.search);
       if(urlParams.has('size')) {
         const size = urlParams.get('size');
-        return Math.ceil(size);
+        return Math.ceil(parseInt(size));
       }else{
         return "100";
       }
