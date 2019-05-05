@@ -44,7 +44,7 @@ function draw() {
     ctx.fillStyle = getColor();
     ctx.fillRect(0, 0, size, size);
     const dataUrlTag = document.getElementById('dataurl');
-    dataUrlTag.innerText = canvas.toDataURL();
+    dataUrlTag.value = canvas.toDataURL();
   }
 }
   </script>
@@ -69,7 +69,10 @@ function draw() {
       <li><a href="https://tinysquare.page/?color=FF0000&size=200">Red square with a size of 200</a></li>
     </ul>
     <canvas id="canvas"></canvas>  
-    <p id='dataurl'></p>
+    <div>
+    <p>Here's the dataurl if you want to embed it</p>
+    <textarea id='dataurl' cols="100" rows="25"></textarea>
+    </div>
     <p>Made with love by <a href="https://articles.coreyhaines.com/">Corey Haines</a></p>
   </body>
 </html>
