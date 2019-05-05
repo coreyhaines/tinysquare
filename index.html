@@ -13,7 +13,8 @@
     function getSize() {
       var urlParams = new URLSearchParams(window.location.search);
       if(urlParams.has('size')) {
-        return urlParams.get('size');
+        const size = urlParams.get('size');
+        return Math.ceil(size);
       }else{
         return "100";
       }
