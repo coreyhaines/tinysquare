@@ -27,7 +27,7 @@
       }
     }
     function getSize() {
-      var urlParams = new URLSearchParams(window.location.search);
+      const urlParams = new URLSearchParams(window.location.search);
       if(urlParams.has('size')) {
         const size = urlParams.get('size');
         return Math.ceil(parseInt(size));
@@ -35,26 +35,34 @@
         return "100";
       }
     }
-function draw() {
-  const size = getSize();
-  const canvas = document.getElementById('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  if (canvas.getContext) {
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = getColor();
-    ctx.fillRect(0, 0, size, size);
-    const dataUrlTag = document.getElementById('dataurl');
-    dataUrlTag.value = canvas.toDataURL();
-  }
-}
-function copyDataURLToClipboard() {
-  if(navigator.clipboard) {
+    function shouldAutoCopyDataUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.has('autocopydataurl');
+    }
+  function draw() {
+    const size = getSize();
     const canvas = document.getElementById('canvas');
-    const dataURL = canvas.toDataURL();
-    navigator.clipboard.writeText(dataURL);
+    canvas.width = size;
+    canvas.height = size;
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = getColor();
+      ctx.fillRect(0, 0, size, size);
+      const dataUrl = canvas.toDataURL();
+      const dataUrlTag = document.getElementById('dataurl');
+      dataUrlTag.value = dataUrl;
+      if(shouldAutoCopyDataUrl()){
+        copyDataURLToClipboard();
+      }
+    }
   }
-}
+  function copyDataURLToClipboard() {
+    if(navigator.clipboard) {
+      const canvas = document.getElementById('canvas');
+      const dataURL = canvas.toDataURL();
+      navigator.clipboard.writeText(dataURL);
+    }
+  }
   </script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-596929-11"></script>
