@@ -48,6 +48,13 @@ function draw() {
     dataUrlTag.value = canvas.toDataURL();
   }
 }
+function copyDataURLToClipboard() {
+  if(navigator.clipboard) {
+    const canvas = document.getElementById('canvas');
+    const dataURL = canvas.toDataURL();
+    navigator.clipboard.writeText(dataURL);
+  }
+}
   </script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-596929-11"></script>
@@ -72,6 +79,7 @@ function draw() {
     <canvas id="canvas"></canvas>  
     <div>
     <p>Here's the dataurl if you want to embed it</p>
+    <div><button onclick='copyDataURLToClipboard();'>Copy dataurl to clipboard</button></div>
     <textarea id='dataurl' cols="100" rows="15"></textarea>
     </div>
     <p>Made with love by <a href="https://articles.coreyhaines.com/">Corey Haines</a></p>
