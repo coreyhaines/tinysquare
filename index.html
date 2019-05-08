@@ -17,6 +17,26 @@
     <meta name="twitter:image" content="https://tinysquare.page/share_image.png"></meta>
     <meta name="twitter:image:alt" content="Tiny Square Page"></meta>
     <title>Tiny Square Page</title>
+<style type='text/css'>
+div.button {
+  background: #3498db;
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+	display: inline-block;
+}
+@media all and (max-width:30em){
+ div.button{
+  display:block;
+  margin:0.2em auto;
+ }
+}
+</style>
 
   <script>
     function getColor() {
@@ -47,8 +67,10 @@
     canvas.height = size;
     if (canvas.getContext) {
       const ctx = canvas.getContext('2d');
+			const	color = getColor();
       ctx.fillStyle = getColor();
       ctx.fillRect(0, 0, size, size);
+			document.getElementById('dataurl-copy-button').style.backgroundColor = color;
       const dataUrl = canvas.toDataURL();
       const dataUrlTag = document.getElementById('dataurl');
       dataUrlTag.value = dataUrl;
