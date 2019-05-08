@@ -38,54 +38,54 @@ div.button {
 }
 </style>
 
-  <script>
-    function getColor() {
-      const urlParams = new URLSearchParams(window.location.search);
-      if(urlParams.has('color')) {
-        return "#" + urlParams.get('color');
-      }else{
-        return "#000000";
-      }
-    }
-    function getSize() {
-      const urlParams = new URLSearchParams(window.location.search);
-      if(urlParams.has('size')) {
-        const size = urlParams.get('size');
-        return Math.ceil(parseInt(size));
-      }else{
-        return "100";
-      }
-    }
-    function shouldAutoCopyDataUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.has('autocopydataurl');
-    }
-  function draw() {
-    const size = getSize();
-    const canvas = document.getElementById('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    if (canvas.getContext) {
-      const ctx = canvas.getContext('2d');
-			const	color = getColor();
-      ctx.fillStyle = getColor();
-      ctx.fillRect(0, 0, size, size);
-			document.getElementById('dataurl-copy-button').style.backgroundColor = color;
-      const dataUrl = canvas.toDataURL();
-      const dataUrlTag = document.getElementById('dataurl');
-      dataUrlTag.value = dataUrl;
-      if(shouldAutoCopyDataUrl()){
-        copyDataURLToClipboard();
-      }
-    }
-  }
-  function copyDataURLToClipboard() {
-    if(navigator.clipboard) {
-      const canvas = document.getElementById('canvas');
-      const dataURL = canvas.toDataURL();
-      navigator.clipboard.writeText(dataURL);
-    }
-  }
+<script>
+function getColor() {
+	const urlParams = new URLSearchParams(window.location.search);
+	if(urlParams.has('color')) {
+		return "#" + urlParams.get('color');
+	}else{
+		return "#000000";
+	}
+}
+function getSize() {
+	const urlParams = new URLSearchParams(window.location.search);
+	if(urlParams.has('size')) {
+		const size = urlParams.get('size');
+		return Math.ceil(parseInt(size));
+	}else{
+		return "100";
+	}
+}
+function shouldAutoCopyDataUrl() {
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.has('autocopydataurl');
+}
+function copyDataURLToClipboard() {
+	if(navigator.clipboard) {
+		const canvas = document.getElementById('canvas');
+		const dataURL = canvas.toDataURL();
+		navigator.clipboard.writeText(dataURL);
+	}
+}
+function draw() {
+	const size = getSize();
+	const canvas = document.getElementById('canvas');
+	canvas.width = size;
+	canvas.height = size;
+	if (canvas.getContext) {
+    const ctx = canvas.getContext('2d', { alpha: false });
+		const	color = getColor();
+		ctx.fillStyle = getColor();
+		ctx.fillRect(0, 0, size, size);
+		document.getElementById('dataurl-copy-button').style.backgroundColor = color;
+		const dataUrl = canvas.toDataURL();
+		const dataUrlTag = document.getElementById('dataurl');
+		dataUrlTag.value = dataUrl;
+		if(shouldAutoCopyDataUrl()){
+			copyDataURLToClipboard();
+		}
+	}
+}
 document.addEventListener("DOMContentLoaded", draw);
   </script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
