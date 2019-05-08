@@ -18,7 +18,7 @@
     <meta name="twitter:image:alt" content="Tiny Square Page"></meta>
     <title>Tiny Square Page</title>
 <style type='text/css'>
-div.button {
+.button {
   background: #3498db;
   -webkit-border-radius: 28;
   -moz-border-radius: 28;
@@ -31,7 +31,7 @@ div.button {
 	display: inline-block;
 }
 @media all and (max-width:30em){
- div.button{
+ .button{
   display:block;
   margin:0.2em auto;
  }
@@ -39,13 +39,16 @@ div.button {
 </style>
 
 <script>
-function getColor() {
+function getColorParam() {
 	const urlParams = new URLSearchParams(window.location.search);
 	if(urlParams.has('color')) {
-		return "#" + urlParams.get('color');
+		return urlParams.get('color');
 	}else{
-		return "#000000";
+		return "000000";
 	}
+}
+function getColor() {
+	return "#" + getColorParam();
 }
 function getSize() {
 	const urlParams = new URLSearchParams(window.location.search);
@@ -78,6 +81,7 @@ function draw() {
 		ctx.fillStyle = getColor();
 		ctx.fillRect(0, 0, size, size);
 		document.getElementById('dataurl-copy-button').style.backgroundColor = color;
+		document.getElementById('download-image-button').style.backgroundColor = color;
 		const dataUrl = canvas.toDataURL();
 		const dataUrlTag = document.getElementById('dataurl');
 		dataUrlTag.value = dataUrl;
@@ -85,6 +89,13 @@ function draw() {
 			copyDataURLToClipboard();
 		}
 	}
+}
+function downloadTinySquare(el) {
+	const canvas = document.getElementById('canvas');
+	const image = canvas.toDataURL("image/jpg");
+	const filename = 'tinysquare-'.concat(getColorParam().toString(), '-', getSize().toString(), '.png');
+	el.download = filename;
+	el.href = image;
 }
 document.addEventListener("DOMContentLoaded", draw);
   </script>
@@ -113,7 +124,10 @@ document.addEventListener("DOMContentLoaded", draw);
     <canvas id="canvas"></canvas>  
     <div>
     <p>Here's the dataurl if you want to embed it</p>
-    <div><div id='dataurl-copy-button' class='button' onclick='copyDataURLToClipboard();'>Copy dataurl to clipboard</div></div>
+    <div>
+			<div id='dataurl-copy-button' class='button' onclick='copyDataURLToClipboard();'>Copy dataurl to clipboard</div>
+			<a id='download-image-button' class='button' download='tinysquare.png' href='' onclick='downloadTinySquare(this);'>Download</a>
+		</div>
     <textarea id='dataurl' cols="100" rows="15"></textarea>
     </div>
     <p>Made with love by <a href="https://articles.coreyhaines.com/">Corey Haines</a></p>
