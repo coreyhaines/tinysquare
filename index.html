@@ -86,6 +86,7 @@ div.button {
       navigator.clipboard.writeText(dataURL);
     }
   }
+document.addEventListener("DOMContentLoaded", draw);
   </script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-596929-11"></script>
@@ -98,7 +99,7 @@ div.button {
 </script>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   </head>
-  <body onload="draw();">
+  <body>
     <h1>Welcome to tinysquare.page</h1>
     <h2>The internet's premiere source for generating images of tiny, colored squares that you can copy and paste wherever you want.</h2>
     <p>Want a square with a custom color and size? Append size and color query parameters. Then just right-click on the square and choose "copy image". Colors are given without the "#", so black is "000000", not "#000000".</p>
