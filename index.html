@@ -36,6 +36,10 @@
   margin:0.2em auto;
  }
 }
+#color-display, #size-display {
+  font-weight: bold;
+  font-size: 1.2em;
+}
 </style>
 
 <script>
@@ -70,6 +74,10 @@ function copyDataURLToClipboard() {
 		navigator.clipboard.writeText(dataURL);
 	}
 }
+function displayColorAndSize(color, size) {
+  document.getElementById('color-display').innerText = color;
+  document.getElementById('size-display').innerText = size;
+}
 function draw() {
 	const size = getSize();
 	const canvas = document.getElementById('canvas');
@@ -80,6 +88,7 @@ function draw() {
 		const	color = getColor();
 		ctx.fillStyle = getColor();
 		ctx.fillRect(0, 0, size, size);
+    displayColorAndSize(color, size);
 		document.getElementById('dataurl-copy-button').style.backgroundColor = color;
 		document.getElementById('download-image-button').style.backgroundColor = color;
 		const dataUrl = canvas.toDataURL();
@@ -114,6 +123,7 @@ document.addEventListener("DOMContentLoaded", draw);
     <h1>Welcome to tinysquare.page</h1>
     <h2>The internet's premiere source for generating images of tiny, colored squares that you can copy and paste wherever you want.</h2>
     <p>Want a square with a custom color and size? Append size and color query parameters. Then just right-click on the square and choose "copy image". Colors are given without the "#", so black is "000000", not "#000000".</p>
+    <p>Here is your square with color <span id='color-display'></span> and size <span id='size-display'></span>.</p>
     <canvas id="canvas"></canvas>
     <p>Here are some awesome examples</p>
     <ul>
