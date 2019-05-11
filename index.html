@@ -125,16 +125,15 @@ document.addEventListener("DOMContentLoaded", draw);
     <p>Want a square with a custom color and size? Append size and color query parameters. Then just right-click on the square and choose "copy image". Colors are given without the "#", so black is "000000", not "#000000".</p>
     <p>Here is your square with color <span id='color-display'></span> and size <span id='size-display'></span>.</p>
     <canvas id="canvas"></canvas>
-    <p>Here are some awesome examples</p>
+    <p>Here are some awesome examples from Pantone's Color of the Year selections.</p>
     <ul>
-      <li><a href="https://tinysquare.page/?color=000000&size=50">Black square with a size of 50</a></li>
-      <li><a href="https://tinysquare.page/?color=FF0000&size=200">Red square with a size of 200</a></li>
-      <li><a href="https://tinysquare.page/?color=FF6F61&size=250">Pantone's Color Of The Year 2019 - Living Coral</a> (<a href="https://www.pantone.com/color-intelligence/color-of-the-year/color-of-the-year-2019" target="_blank" rel="noopener noreferrer">more info</a>)
-      <li><a href="https://tinysquare.page/?color=00FF00&size=150&autocopydataurl">Autocopy DataURL for a Green square with a size of 150</a></li>
+      <li><a href="https://tinysquare.page/?color=FF6F61&size=250">Pantone's Color Of The Year 2019 - Living Coral</a> (<a href="https://www.pantone.com/color-intelligence/color-of-the-year/color-of-the-year-2019" target="_blank" rel="noopener noreferrer">more info</a>)</li>
+      <li><a href="https://tinysquare.page/?color=5F4B8B&size=250">Pantone's Color Of The Year 2018 - Ultra Violet</a> (<a href="https://www.pantone.com/color-intelligence/color-of-the-year/color-of-the-year-2018" target="_blank" rel="noopener noreferrer">more info</a>)</li>
+      <li><a href="https://tinysquare.page/?color=88B04B&size=250">Pantone's Color Of The Year 2017 - Greenery</a> (<a href="https://www.pantone.com/color-intelligence/color-of-the-year/color-of-the-year-2017" target="_blank" rel="noopener noreferrer">more info</a>)</li>
     </ul>
     <div>
-    <p>Here's the dataurl if you want to embed it</p>
-    <p>If you want to autocopy the dataurl to your clipboard, add a "autocopydataurl" query parameter.</p>
+    <p>Here's the dataurl if you want to embed it<br>
+    If you want to autocopy the dataurl to your clipboard, add a "autocopydataurl" query parameter.<a href="https://tinysquare.page/?color=FF6F61&size=150&autocopydataurl">example</a></p>
     <div>
 			<div id='dataurl-copy-button' class='button' onclick='copyDataURLToClipboard();'>Copy dataurl to clipboard</div>
 			<a id='download-image-button' class='button' download='tinysquare.png' href='' onclick='downloadTinySquare(this);'>Download Tiny Square Image</a>
