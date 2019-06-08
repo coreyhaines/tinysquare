@@ -43,29 +43,58 @@
 </style>
 
 <script>
-function getColorParam() {
+window.tinySquare = {
+  defaultColor: "FF6F61",
+  defaultSize : "200",
+  color: null,
+  size: null,
+};
+function getColor() {
+  return window.tinySquare.color;
+}
+function getSize() {
+  return window.tinySquare.size;
+}
+
+function getColorFromParam() {
 	const urlParams = new URLSearchParams(window.location.search);
 	if(urlParams.has('color')) {
 		return urlParams.get('color');
 	}else{
-		return "FF6F61";
+		return window.tinySquare.defaultColor;
 	}
+}
+function setColorFromParam() {
+  window.tinySquare.color = getColorFromParam();
+  return getColor();
 }
 function getColorFromPicker() {
   return document.getElementById('color-picker').value;
 }
-function getColor() {
-	return "#" + getColorParam();
+function setColorFromPicker() {
+  window.tinySquare.color = getColorFromPicker();
+  return getColor();
 }
-function getSize() {
+function getSizeFromParam() {
 	const urlParams = new URLSearchParams(window.location.search);
 	if(urlParams.has('size')) {
 		const size = urlParams.get('size');
 		return Math.ceil(parseInt(size));
 	}else{
-		return "200";
+		return window.tinySquare.defaultSize;
 	}
 }
+function setSizeFromParam() {
+  window.tinySquare.size = getSizeFromParam();
+  return getSize();
+}
+
+function onLoad() {
+  const color = setColorFromParam();
+  const size = setSizeFromParam();
+  handleSizeAndColor(size, color);
+}
+
 function shouldAutoCopyDataUrl() {
 	const urlParams = new URLSearchParams(window.location.search);
 	return urlParams.has('autocopydataurl');
@@ -77,12 +106,9 @@ function copyDataURLToClipboard() {
 		navigator.clipboard.writeText(dataURL);
 	}
 }
-function displayColorAndSize(color, size) {
-  document.getElementById('color-display').innerText = color;
-  document.getElementById('size-display').innerText = size;
-}
+
 function colorPickerChange(e) {
-  const color = e.target.value;
+  const color = setColorFromPicker();
   handleSizeAndColor(getSize(), color);
 }
 function initializeColorPicker(color) {
@@ -91,13 +117,15 @@ function initializeColorPicker(color) {
   colorPicker.addEventListener("input", colorPickerChange);
   document.getElementById('color-display').addEventListener('click', function() { document.getElementById('color-picker').click(); });
 }
-function draw(){
-	const size = getSize();
-  const	color = getColor();
-  handleSizeAndColor(size, color);
+
+function displayColorAndSize(color, size) {
+  document.getElementById('color-display').innerText = color;
+  document.getElementById('size-display').innerText = size;
 }
+
 function handleSizeAndColor(size, color) {
 	const canvas = document.getElementById('canvas');
+  color = color.startsWith("#") ? color : "#" + color;
 	canvas.width = size;
 	canvas.height = size;
 	if (canvas.getContext) {
@@ -119,12 +147,11 @@ function handleSizeAndColor(size, color) {
 function downloadTinySquare(el) {
 	const canvas = document.getElementById('canvas');
 	const image = canvas.toDataURL("image/jpg");
-  console.log("getColorFromPicker", getColorFromPicker().toString());
-	const filename = 'tinysquare-'.concat(getColorFromPicker().toString(), '-', getSize().toString(), '.png');
+	const filename = 'tinysquare-'.concat(getColor(), '-', getSize().toString(), '.png');
 	el.download = filename;
 	el.href = image;
 }
-document.addEventListener("DOMContentLoaded", draw);
+document.addEventListener("DOMContentLoaded", onLoad);
   </script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-596929-11"></script>
