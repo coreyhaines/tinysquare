@@ -86,6 +86,7 @@ function initializeColorPicker(color) {
   const colorPicker = document.getElementById('color-picker');
   colorPicker.value = color;
   colorPicker.addEventListener("input", colorPickerChange);
+  document.getElementById('color-display').addEventListener('click', function() { document.getElementById('color-picker').click(); });
 }
 function draw(){
 	const size = getSize();
@@ -136,8 +137,7 @@ document.addEventListener("DOMContentLoaded", draw);
     <h1>Welcome to tinysquare.page</h1>
     <h2>The internet's premier source for generating images of tiny, colored squares that you can copy and paste wherever you want.</h2>
     <p>Want a square with a custom color and size? Append size and color query parameters. Then just right-click on the square and choose "copy image". Colors are given without the "#", so black is "000000", not "#000000".</p>
-    <p>Here is your square with color <span id='color-display'></span> and size <span id='size-display'></span>.
-    Select a new color: <input type='color' id='color-picker'>
+    <p>Here is your square with size <span id='size-display'></span> and color <span id='color-display'></span> <input type='color' id='color-picker'>.
     </p>
     <canvas id="canvas"></canvas>
     <p>Here are some awesome examples from Pantone's Color of the Year selections.</p>
