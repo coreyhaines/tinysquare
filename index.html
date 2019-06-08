@@ -51,6 +51,9 @@ function getColorParam() {
 		return "FF6F61";
 	}
 }
+function getColorFromPicker() {
+  return document.getElementById('color-picker').value;
+}
 function getColor() {
 	return "#" + getColorParam();
 }
@@ -116,7 +119,8 @@ function handleSizeAndColor(size, color) {
 function downloadTinySquare(el) {
 	const canvas = document.getElementById('canvas');
 	const image = canvas.toDataURL("image/jpg");
-	const filename = 'tinysquare-'.concat(getColorParam().toString(), '-', getSize().toString(), '.png');
+  console.log("getColorFromPicker", getColorFromPicker().toString());
+	const filename = 'tinysquare-'.concat(getColorFromPicker().toString(), '-', getSize().toString(), '.png');
 	el.download = filename;
 	el.href = image;
 }
