@@ -78,17 +78,30 @@ function displayColorAndSize(color, size) {
   document.getElementById('color-display').innerText = color;
   document.getElementById('size-display').innerText = size;
 }
-function draw() {
+function colorPickerChange(e) {
+  const color = e.target.value;
+  handleSizeAndColor(getSize(), color);
+}
+function initializeColorPicker(color) {
+  const colorPicker = document.getElementById('color-picker');
+  colorPicker.value = color;
+  colorPicker.addEventListener("input", colorPickerChange);
+}
+function draw(){
 	const size = getSize();
+  const	color = getColor();
+  handleSizeAndColor(size, color);
+}
+function handleSizeAndColor(size, color) {
 	const canvas = document.getElementById('canvas');
 	canvas.width = size;
 	canvas.height = size;
 	if (canvas.getContext) {
     const ctx = canvas.getContext('2d', { alpha: false });
-		const	color = getColor();
-		ctx.fillStyle = getColor();
+		ctx.fillStyle = color;
 		ctx.fillRect(0, 0, size, size);
     displayColorAndSize(color, size);
+    initializeColorPicker(color);
 		document.getElementById('dataurl-copy-button').style.backgroundColor = color;
 		document.getElementById('download-image-button').style.backgroundColor = color;
 		const dataUrl = canvas.toDataURL();
@@ -123,7 +136,9 @@ document.addEventListener("DOMContentLoaded", draw);
     <h1>Welcome to tinysquare.page</h1>
     <h2>The internet's premier source for generating images of tiny, colored squares that you can copy and paste wherever you want.</h2>
     <p>Want a square with a custom color and size? Append size and color query parameters. Then just right-click on the square and choose "copy image". Colors are given without the "#", so black is "000000", not "#000000".</p>
-    <p>Here is your square with color <span id='color-display'></span> and size <span id='size-display'></span>.</p>
+    <p>Here is your square with color <span id='color-display'></span> and size <span id='size-display'></span>.
+    Select a new color: <input type='color' id='color-picker'>
+    </p>
     <canvas id="canvas"></canvas>
     <p>Here are some awesome examples from Pantone's Color of the Year selections.</p>
     <ul>
