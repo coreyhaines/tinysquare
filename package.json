@@ -1,0 +1,28 @@
+{
+  "name": "tinysquare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "parcel-plugin-inline-source": "^1.0.0",
+    "sass": "^1.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coreyhaines/tinysquare.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/coreyhaines/tinysquare/issues"
+  },
+  "homepage": "https://github.com/coreyhaines/tinysquare#readme"
+}
