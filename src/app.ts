@@ -1,3 +1,5 @@
+interface Window { tinySquare: any; }
+
 window.tinySquare = {
   defaultColor: "FF6F61",
   defaultSize : "200",
@@ -24,22 +26,22 @@ function setColorFromParam() : string {
   return getColor();
 }
 function getColorFromPicker() : string {
-  return document.getElementById('color-picker').value;
+  return (<HTMLInputElement>document.getElementById('color-picker')).value;
 }
 function setColorFromPicker() : string {
   window.tinySquare.color = getColorFromPicker();
   return getColor();
 }
-function getSizeFromParam() {
+function getSizeFromParam() : number {
 	const urlParams = new URLSearchParams(window.location.search);
 	if(urlParams.has('size')) {
 		const size = urlParams.get('size');
 		return Math.ceil(parseInt(size));
 	}else{
-		return window.tinySquare.defaultSize;
+		return parseInt(window.tinySquare.defaultSize);
 	}
 }
-function setSizeFromParam() {
+function setSizeFromParam()  : string {
   window.tinySquare.size = getSizeFromParam();
   return getSize();
 }
@@ -56,7 +58,7 @@ function shouldAutoCopyDataUrl() {
 }
 function copyDataURLToClipboard() {
 	if(navigator.clipboard) {
-		const canvas = document.getElementById('canvas');
+		const canvas : HTMLCanvasElement= <HTMLCanvasElement> document.getElementById('canvas');
 		const dataURL : string = canvas.toDataURL();
 		navigator.clipboard.writeText(dataURL);
 	}
@@ -67,7 +69,7 @@ function colorPickerChange(e) {
   handleSizeAndColor(getSize(), color);
 }
 function initializeColorPicker(color) {
-  const colorPicker = document.getElementById('color-picker');
+  const colorPicker = <HTMLInputElement> document.getElementById('color-picker');
   colorPicker.value = color;
   colorPicker.addEventListener("input", colorPickerChange);
   document.getElementById('color-display').addEventListener('click', function() { document.getElementById('color-picker').click(); });
@@ -79,7 +81,7 @@ function displayColorAndSize(color, size) {
 }
 
 function handleSizeAndColor(size, color) {
-	const canvas = document.getElementById('canvas');
+	const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
   color = color.startsWith("#") ? color : "#" + color;
 	canvas.width = size;
 	canvas.height = size;
@@ -92,7 +94,7 @@ function handleSizeAndColor(size, color) {
 		document.getElementById('dataurl-copy-button').style.backgroundColor = color;
 		document.getElementById('download-image-button').style.backgroundColor = color;
 		const dataUrl = canvas.toDataURL();
-		const dataUrlTag = document.getElementById('dataurl');
+		const dataUrlTag = <HTMLInputElement> document.getElementById('dataurl');
 		dataUrlTag.value = dataUrl;
 		if(shouldAutoCopyDataUrl()){
 			copyDataURLToClipboard();
@@ -100,8 +102,8 @@ function handleSizeAndColor(size, color) {
 	}
 }
 function downloadTinySquare(el) {
-	const canvas = document.getElementById('canvas');
-	const image = canvas.toDataURL("image/jpg");
+	const canvas = <HTMLCanvasElement> document.getElementById('canvas');
+	const image =  canvas.toDataURL("image/jpg");
 	const filename = 'tinysquare-'.concat(getColor(), '-', getSize().toString(), '.png');
 	el.download = filename;
 	el.href = image;
