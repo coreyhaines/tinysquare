@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel src/index.html",
+    "dev": "parcel --out-dir dev-output src/index.html",
     "build": "parcel build --out-dir docs src/index.html",
     "typecheck": "tsc --noEmit --listFiles ",
     "test": "echo \"Error: no test specified\" && exit 1"
