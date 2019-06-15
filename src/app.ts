@@ -42,6 +42,10 @@ function ifNotNull<T, U>(v : T | null, func : (v : T ) => U) : U | void {
   }
 }
 
+function withElementById<U>(id : string, func : ( element : HTMLElement ) => U) : U | void {
+  return ifNotNull<HTMLElement, U>(document.getElementById(id), func);
+}
+
 function getColorFromParam() : string {
   const urlParams = new URLSearchParams(window.location.search);
   return withDefault<string>(urlParams.get('color'), window.tinySquare.defaultColor);
@@ -71,12 +75,8 @@ function onLoad() {
   const color : string = setColorFromParam();
   const size = setSizeFromParam();
   handleSizeAndColor(size, color);
-  ifNotNull(document.getElementById('download-image-button'),
-            (el) => { el.addEventListener("click", downloadTinySquare); }
-           );
-  ifNotNull(document.getElementById('dataurl-copy-button'),
-            (el) => { el.addEventListener("click", copyDataURLToClipboard); }
-           );
+  withElementById('download-image-button', (el) => { el.addEventListener("click", downloadTinySquare); });
+  withElementById('dataurl-copy-button', (el) => { el.addEventListener("click", copyDataURLToClipboard); });
 }
 
 function shouldAutoCopyDataUrl() {
@@ -99,18 +99,12 @@ function initializeColorPicker(color : string) {
   const colorPicker = <HTMLInputElement> document.getElementById('color-picker');
   colorPicker.value = color;
   colorPicker.addEventListener("input", colorPickerChange);
-  ifNotNull(document.getElementById('color-display'),
-            (el) => { el.addEventListener('click', function() { colorPicker.click(); }) }
-           );
+  withElementById('color-display', (el) => { el.addEventListener('click', function() { colorPicker.click(); }) });
 }
 
 function displayColorAndSize(color : string, size : number) {
-  ifNotNull(document.getElementById('color-display'),
-            (el) => { el.innerText = color }
-           );
-  ifNotNull(document.getElementById('size-display'),
-            (el) => { el.innerText = size.toString() }
-           );
+  withElementById('color-display', (el) => { el.innerText = color });
+  withElementById('size-display', (el) => { el.innerText = size.toString() });
 }
 
 function handleSizeAndColor(size : number, color : string) {
@@ -125,12 +119,8 @@ function handleSizeAndColor(size : number, color : string) {
       ctx.fillRect(0, 0, size, size);
       displayColorAndSize(color, size);
       initializeColorPicker(color);
-      ifNotNull(document.getElementById('dataurl-copy-button'), 
-                (el) => { el.style.backgroundColor = color}
-               ) ;
-      ifNotNull(document.getElementById('download-image-button'),
-                (el) => { el.style.backgroundColor = color}
-               );
+      withElementById('dataurl-copy-button', (el) => { el.style.backgroundColor = color}) ;
+      withElementById('download-image-button', (el) => { el.style.backgroundColor = color});
       const dataUrl = canvas.toDataURL();
       const dataUrlTag = <HTMLInputElement> document.getElementById('dataurl');
       dataUrlTag.value = dataUrl;
