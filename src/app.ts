@@ -74,6 +74,9 @@ function onLoad() {
   ifNotNull(document.getElementById('download-image-button'),
             (el) => { el.addEventListener("click", downloadTinySquare); }
            );
+  ifNotNull(document.getElementById('dataurl-copy-button'),
+            (el) => { el.addEventListener("click", copyDataURLToClipboard); }
+           );
 }
 
 function shouldAutoCopyDataUrl() {
@@ -81,10 +84,8 @@ function shouldAutoCopyDataUrl() {
   return urlParams.has('autocopydataurl');
 }
 function copyDataURLToClipboard() {
-  console.log("HERE");
   if(navigator.clipboard) {
-    console.log("HAVE CLIPBOARD");
-    const canvas : HTMLCanvasElement= <HTMLCanvasElement> document.getElementById('canvas');
+    const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
     const dataURL : string = canvas.toDataURL();
     navigator.clipboard.writeText(dataURL);
   }
