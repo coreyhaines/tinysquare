@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "parcel src/index.html",
     "build": "parcel build --out-dir docs src/index.html",
-    "typecheck": "tsc --noEmit --listFiles src/app.ts",
+    "typecheck": "tsc --noEmit --listFiles ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {},

@@ -1,9 +1,8 @@
 {
-"compilerOptions": {
+  "compilerOptions": {
     "noImplicitAny": true
     , "strictNullChecks": true
     , "removeComments": true
-    , "useStrict": true
     , "strict": true
     , "noImplicitReturns": true
     , "sourceMap": false
