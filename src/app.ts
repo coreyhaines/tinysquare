@@ -1,25 +1,50 @@
-interface Window { tinySquare: any; }
+interface TinySquareConfig {
+  defaultColor : string,
+  defaultSize : string,
+  color : string | undefined,
+  size : number | undefined
+}
+
+interface Window { tinySquare: TinySquareConfig }
 
 window.tinySquare = {
   defaultColor: "FF6F61",
   defaultSize : "200",
-  color: null,
-  size: null,
+  color: undefined,
+  size: undefined,
 };
 function getColor() : string {
-  return window.tinySquare.color;
+  if(window.tinySquare.color){ 
+    return window.tinySquare.color;
+  }else{
+    return "";
+  }
 }
-function getSize() : string {
-  return window.tinySquare.size;
+function getSize() : number {
+  if(window.tinySquare.size) {
+    return window.tinySquare.size;
+  }else{
+    return 0;
+  }
+}
+
+function withDefault<T>(v : T | null | undefined, defaultValue : T) : T {
+  if(v === null || v === undefined) {
+    return defaultValue;
+  }else{
+    return v;
+  }
+}
+
+function ifNotNull<T, U>(v : T | null, func : (v : T ) => U) : U | void {
+  if(v !== null) {
+    return func(v);
+  }
 }
 
 function getColorFromParam() : string {
-	const urlParams = new URLSearchParams(window.location.search);
-	if(urlParams.has('color')) {
-		return urlParams.get('color');
-	}else{
-		return window.tinySquare.defaultColor;
-	}
+  const urlParams = new URLSearchParams(window.location.search);
+  return withDefault<string>(urlParams.get('color'), window.tinySquare.defaultColor);
 }
 function setColorFromParam() : string {
   window.tinySquare.color = getColorFromParam();
@@ -33,15 +58,11 @@ function setColorFromPicker() : string {
   return getColor();
 }
 function getSizeFromParam() : number {
-	const urlParams = new URLSearchParams(window.location.search);
-	if(urlParams.has('size')) {
-		const size = urlParams.get('size');
-		return Math.ceil(parseInt(size));
-	}else{
-		return parseInt(window.tinySquare.defaultSize);
-	}
+  const urlParams = new URLSearchParams(window.location.search);
+  const size = withDefault<string>(urlParams.get('size'), window.tinySquare.defaultSize);
+  return Math.ceil(parseInt(size));
 }
-function setSizeFromParam()  : string {
+function setSizeFromParam()  : number {
   window.tinySquare.size = getSizeFromParam();
   return getSize();
 }
@@ -50,62 +71,80 @@ function onLoad() {
   const color : string = setColorFromParam();
   const size = setSizeFromParam();
   handleSizeAndColor(size, color);
+  ifNotNull(document.getElementById('download-image-button'),
+            (el) => { el.addEventListener("click", downloadTinySquare); }
+           );
 }
 
 function shouldAutoCopyDataUrl() {
-	const urlParams = new URLSearchParams(window.location.search);
-	return urlParams.has('autocopydataurl');
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.has('autocopydataurl');
 }
 function copyDataURLToClipboard() {
-	if(navigator.clipboard) {
-		const canvas : HTMLCanvasElement= <HTMLCanvasElement> document.getElementById('canvas');
-		const dataURL : string = canvas.toDataURL();
-		navigator.clipboard.writeText(dataURL);
-	}
+  console.log("HERE");
+  if(navigator.clipboard) {
+    console.log("HAVE CLIPBOARD");
+    const canvas : HTMLCanvasElement= <HTMLCanvasElement> document.getElementById('canvas');
+    const dataURL : string = canvas.toDataURL();
+    navigator.clipboard.writeText(dataURL);
+  }
 }
 
-function colorPickerChange(e) {
+function colorPickerChange(e : Event) {
   const color = setColorFromPicker();
   handleSizeAndColor(getSize(), color);
 }
-function initializeColorPicker(color) {
+function initializeColorPicker(color : string) {
   const colorPicker = <HTMLInputElement> document.getElementById('color-picker');
   colorPicker.value = color;
   colorPicker.addEventListener("input", colorPickerChange);
-  document.getElementById('color-display').addEventListener('click', function() { document.getElementById('color-picker').click(); });
+  ifNotNull(document.getElementById('color-display'),
+            (el) => { el.addEventListener('click', function() { colorPicker.click(); }) }
+           );
 }
 
-function displayColorAndSize(color, size) {
-  document.getElementById('color-display').innerText = color;
-  document.getElementById('size-display').innerText = size;
+function displayColorAndSize(color : string, size : number) {
+  ifNotNull(document.getElementById('color-display'),
+            (el) => { el.innerText = color }
+           );
+  ifNotNull(document.getElementById('size-display'),
+            (el) => { el.innerText = size.toString() }
+           );
 }
 
-function handleSizeAndColor(size, color) {
-	const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
+function handleSizeAndColor(size : number, color : string) {
+  const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
   color = color.startsWith("#") ? color : "#" + color;
-	canvas.width = size;
-	canvas.height = size;
-	if (canvas.getContext) {
-    const ctx = canvas.getContext('2d', { alpha: false });
-		ctx.fillStyle = color;
-		ctx.fillRect(0, 0, size, size);
-    displayColorAndSize(color, size);
-    initializeColorPicker(color);
-		document.getElementById('dataurl-copy-button').style.backgroundColor = color;
-		document.getElementById('download-image-button').style.backgroundColor = color;
-		const dataUrl = canvas.toDataURL();
-		const dataUrlTag = <HTMLInputElement> document.getElementById('dataurl');
-		dataUrlTag.value = dataUrl;
-		if(shouldAutoCopyDataUrl()){
-			copyDataURLToClipboard();
-		}
-	}
+  canvas.width = size;
+  canvas.height = size;
+  if (canvas.getContext) {
+    const ctx : CanvasRenderingContext2D | null = canvas.getContext('2d', { alpha: false });
+    if(ctx) {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, size, size);
+      displayColorAndSize(color, size);
+      initializeColorPicker(color);
+      ifNotNull(document.getElementById('dataurl-copy-button'), 
+                (el) => { el.style.backgroundColor = color}
+               ) ;
+      ifNotNull(document.getElementById('download-image-button'),
+                (el) => { el.style.backgroundColor = color}
+               );
+      const dataUrl = canvas.toDataURL();
+      const dataUrlTag = <HTMLInputElement> document.getElementById('dataurl');
+      dataUrlTag.value = dataUrl;
+      if(shouldAutoCopyDataUrl()){
+        copyDataURLToClipboard();
+      }
+    }
+  }
 }
-function downloadTinySquare(el) {
-	const canvas = <HTMLCanvasElement> document.getElementById('canvas');
-	const image =  canvas.toDataURL("image/jpg");
-	const filename = 'tinysquare-'.concat(getColor(), '-', getSize().toString(), '.png');
-	el.download = filename;
-	el.href = image;
+function downloadTinySquare(e : Event) {
+  const canvas = <HTMLCanvasElement> document.getElementById('canvas');
+  const image =  canvas.toDataURL("image/jpg");
+  const filename = 'tinysquare-'.concat(getColor(), '-', getSize().toString(), '.png');
+  const el = <HTMLAnchorElement> e.target;
+  el.download = filename;
+  el.href = image;
 }
 document.addEventListener("DOMContentLoaded", onLoad);
