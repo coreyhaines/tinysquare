@@ -1,0 +1,20 @@
+.button {
+  background: #3498db;
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0.2em auto;
+}
+
+#color-display, #size-display {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/*# sourceMappingURL=/styles.164d45a1.css.map */

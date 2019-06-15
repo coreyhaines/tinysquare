@@ -4,14 +4,14 @@ window.tinySquare = {
   color: null,
   size: null,
 };
-function getColor() {
+function getColor() : string {
   return window.tinySquare.color;
 }
-function getSize() {
+function getSize() : string {
   return window.tinySquare.size;
 }
 
-function getColorFromParam() {
+function getColorFromParam() : string {
 	const urlParams = new URLSearchParams(window.location.search);
 	if(urlParams.has('color')) {
 		return urlParams.get('color');
@@ -19,14 +19,14 @@ function getColorFromParam() {
 		return window.tinySquare.defaultColor;
 	}
 }
-function setColorFromParam() {
+function setColorFromParam() : string {
   window.tinySquare.color = getColorFromParam();
   return getColor();
 }
-function getColorFromPicker() {
+function getColorFromPicker() : string {
   return document.getElementById('color-picker').value;
 }
-function setColorFromPicker() {
+function setColorFromPicker() : string {
   window.tinySquare.color = getColorFromPicker();
   return getColor();
 }
@@ -45,7 +45,7 @@ function setSizeFromParam() {
 }
 
 function onLoad() {
-  const color = setColorFromParam();
+  const color : string = setColorFromParam();
   const size = setSizeFromParam();
   handleSizeAndColor(size, color);
 }
@@ -57,7 +57,7 @@ function shouldAutoCopyDataUrl() {
 function copyDataURLToClipboard() {
 	if(navigator.clipboard) {
 		const canvas = document.getElementById('canvas');
-		const dataURL = canvas.toDataURL();
+		const dataURL : string = canvas.toDataURL();
 		navigator.clipboard.writeText(dataURL);
 	}
 }
