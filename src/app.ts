@@ -1,8 +1,8 @@
 interface TinySquareConfig {
   defaultColor : string,
   defaultSize : string,
-  color : string | undefined,
-  size : number | undefined
+  color : Maybe<string>,
+  size : Maybe<number>
 }
 
 interface Window { tinySquare: TinySquareConfig }
@@ -13,8 +13,44 @@ window.tinySquare = {
   color: undefined,
   size: undefined,
 };
+
+type Maybe<T> = T | undefined;
+function maybeMap<T, U>(mv: Maybe<T>, f: (v:T) => U) : Maybe<U> {
+  if(mv !== undefined) {
+    return f(mv);
+  }else{
+    return undefined;
+  }
+}
+function MaybeBind<T, U>(mv: Maybe<T>, f: (v:T) => Maybe<U>) : Maybe<U> {
+  if(mv !== undefined) {
+    return f(mv);
+  }else{
+    return undefined;
+  }
+}
+function withDefault<T>(v : Maybe<T>, defaultValue : T) : T {
+  if(v === undefined) {
+    return defaultValue;
+  }else{
+    return v;
+  }
+}
+function maybeFromNullable<T>(v : T | null) : Maybe<T> {
+  if(v === null) {
+    return undefined;
+  }else{
+    return v;
+  }
+}
+
+function withElementById<U>(id : string, func : ( element : HTMLElement ) => U) : U | void {
+  return maybeMap(maybeFromNullable(document.getElementById(id)), func);
+}
+
+
 function getColor() : string {
-  if(window.tinySquare.color){ 
+  if(window.tinySquare.color){
     return window.tinySquare.color;
   }else{
     return "";
@@ -27,28 +63,9 @@ function getSize() : number {
     return 0;
   }
 }
-
-function withDefault<T>(v : T | null | undefined, defaultValue : T) : T {
-  if(v === null || v === undefined) {
-    return defaultValue;
-  }else{
-    return v;
-  }
-}
-
-function ifNotNull<T, U>(v : T | null, func : (v : T ) => U) : U | void {
-  if(v !== null) {
-    return func(v);
-  }
-}
-
-function withElementById<U>(id : string, func : ( element : HTMLElement ) => U) : U | void {
-  return ifNotNull<HTMLElement, U>(document.getElementById(id), func);
-}
-
 function getColorFromParam() : string {
   const urlParams = new URLSearchParams(window.location.search);
-  return withDefault<string>(urlParams.get('color'), window.tinySquare.defaultColor);
+  return withDefault(maybeFromNullable(urlParams.get('color')), window.tinySquare.defaultColor);
 }
 function setColorFromParam() : string {
   window.tinySquare.color = getColorFromParam();
@@ -63,7 +80,7 @@ function setColorFromPicker() : string {
 }
 function getSizeFromParam() : number {
   const urlParams = new URLSearchParams(window.location.search);
-  const size = withDefault<string>(urlParams.get('size'), window.tinySquare.defaultSize);
+  const size = withDefault(maybeFromNullable(urlParams.get('size')), window.tinySquare.defaultSize);
   return Math.ceil(parseInt(size));
 }
 function setSizeFromParam()  : number {
