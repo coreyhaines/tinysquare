@@ -91,9 +91,23 @@ function setSizeFromParam()  : number {
 function onLoad() {
   const color : string = setColorFromParam();
   const size = setSizeFromParam();
-  handleSizeAndColor(size, color);
+  if(color === "pride") {
+    drawPride(size);
+  }else{
+    handleSizeAndColor(size, color);
+  }
+  displayColorAndSize(color, size);
+  initializeColorPicker(color);
+  displayDataUrl();
   withElementById('download-image-button', (el) => { el.addEventListener("click", downloadTinySquare); });
   withElementById('dataurl-copy-button', (el) => { el.addEventListener("click", copyDataURLToClipboard); });
+}
+
+function displayDataUrl() {
+  const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
+  const dataUrl = canvas.toDataURL();
+  const dataUrlTag = <HTMLInputElement> document.getElementById('dataurl');
+  dataUrlTag.value = dataUrl;
 }
 
 function shouldAutoCopyDataUrl() {
@@ -114,14 +128,48 @@ function colorPickerChange(e : Event) {
 }
 function initializeColorPicker(color : string) {
   const colorPicker = <HTMLInputElement> document.getElementById('color-picker');
-  colorPicker.value = color;
-  colorPicker.addEventListener("input", colorPickerChange);
-  withElementById('color-display', (el) => { el.addEventListener('click', function() { colorPicker.click(); }) });
+  if(color === "pride") {
+    const parent = colorPicker.parentNode;
+    if(parent) {
+      parent.removeChild(colorPicker);
+    }
+  }else{
+    colorPicker.value = color;
+    colorPicker.addEventListener("input", colorPickerChange);
+    withElementById('color-display', (el) => { el.addEventListener('click', function() { colorPicker.click(); }) });
+  }
 }
 
 function displayColorAndSize(color : string, size : number) {
   withElementById('color-display', (el) => { el.innerText = color });
   withElementById('size-display', (el) => { el.innerText = size.toString() });
+}
+
+function drawPride(size: number) {
+  const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx : CanvasRenderingContext2D | null = canvas.getContext('2d', { alpha: false });
+  if(ctx) {
+    const colors = 
+      [ "#E70000"
+      , "#FF8C00"
+      , "#FFEF00"
+      , "#00811F"
+      , "#0044FF"
+      , "#760089"
+      ]
+    const increment = 1 / colors.length;
+    console.log("increment", increment);
+    const grd = ctx.createLinearGradient(0,0,0,size);
+    for(let i = 0; i < colors.length; i++) {
+      const colorStop = i * increment;
+      grd.addColorStop(colorStop, colors[i]);
+      grd.addColorStop(colorStop + increment - .001, colors[i]);
+    }
+    ctx.fillStyle = grd;
+    ctx.fillRect(0,0, size, size);
+  }
 }
 
 function handleSizeAndColor(size : number, color : string) {
@@ -134,13 +182,8 @@ function handleSizeAndColor(size : number, color : string) {
     if(ctx) {
       ctx.fillStyle = color;
       ctx.fillRect(0, 0, size, size);
-      displayColorAndSize(color, size);
-      initializeColorPicker(color);
       withElementById('dataurl-copy-button', (el) => { el.style.backgroundColor = color}) ;
       withElementById('download-image-button', (el) => { el.style.backgroundColor = color});
-      const dataUrl = canvas.toDataURL();
-      const dataUrlTag = <HTMLInputElement> document.getElementById('dataurl');
-      dataUrlTag.value = dataUrl;
       if(shouldAutoCopyDataUrl()){
         copyDataURLToClipboard();
       }
