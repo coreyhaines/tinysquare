@@ -22,18 +22,18 @@ function maybeMap<T, U>(mv: Maybe<T>, f: (v:T) => U) : Maybe<U> {
     return undefined;
   }
 }
-function MaybeBind<T, U>(mv: Maybe<T>, f: (v:T) => Maybe<U>) : Maybe<U> {
+function maybeBind<T, U>(mv: Maybe<T>, f: (v:T) => Maybe<U>) : Maybe<U> {
   if(mv !== undefined) {
     return f(mv);
   }else{
     return undefined;
   }
 }
-function withDefault<T>(v : Maybe<T>, defaultValue : T) : T {
-  if(v === undefined) {
+function withDefault<T>(mv : Maybe<T>, defaultValue : T) : T {
+  if(mv === undefined) {
     return defaultValue;
   }else{
-    return v;
+    return mv;
   }
 }
 function maybeFromNullable<T>(v : T | null) : Maybe<T> {
