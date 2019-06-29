@@ -51,9 +51,14 @@ function withElementById<U>(id : string, func : ( element : HTMLElement ) => U) 
 
 function getColor() : string {
   if(window.tinySquare.color){
-    return window.tinySquare.color;
+    const color= window.tinySquare.color;
+    if(color == "pride") {
+      return color;
+    }else{
+      return color.startsWith("#") ? color : "#" + color;
+    }
   }else{
-    return "";
+    return window.tinySquare.defaultColor;
   }
 }
 function getSize() : number {
@@ -162,7 +167,6 @@ function drawPride(size: number) {
       , "#760089"
       ]
     const increment = 1 / colors.length;
-    console.log("increment", increment);
     const grd = ctx.createLinearGradient(0,0,0,size);
     for(let i = 0; i < colors.length; i++) {
       const colorStop = i * increment;
@@ -176,7 +180,6 @@ function drawPride(size: number) {
 
 function handleSizeAndColor(size : number, color : string) {
   const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
-  color = color.startsWith("#") ? color : "#" + color;
   canvas.width = size;
   canvas.height = size;
   if (canvas.getContext) {
