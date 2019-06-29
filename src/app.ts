@@ -124,7 +124,9 @@ function copyDataURLToClipboard() {
 
 function colorPickerChange(e : Event) {
   const color = setColorFromPicker();
-  handleSizeAndColor(getSize(), color);
+  const size = getSize();
+  handleSizeAndColor(size, color);
+  displayColorAndSize(color, size);
 }
 function initializeColorPicker(color : string) {
   const colorPicker = <HTMLInputElement> document.getElementById('color-picker');
