@@ -2,7 +2,8 @@ interface TinySquareConfig {
   defaultColor : string,
   defaultSize : string,
   color : Maybe<string>,
-  size : Maybe<number>
+  size : Maybe<number>,
+  specialColors : Record<string, Array<string>>
 }
 
 interface Window { tinySquare: TinySquareConfig }
@@ -12,6 +13,16 @@ window.tinySquare = {
   defaultSize : "200",
   color: undefined,
   size: undefined,
+  specialColors: {
+    "pride":
+      [ "#E70000"
+      , "#FF8C00"
+      , "#FFEF00"
+      , "#00811F"
+      , "#0044FF"
+      , "#760089"
+      ]
+  }
 };
 
 type Maybe<T> = T | undefined;
@@ -96,8 +107,8 @@ function setSizeFromParam()  : number {
 function onLoad() {
   const color : string = setColorFromParam();
   const size = setSizeFromParam();
-  if(color === "pride") {
-    drawPride(size);
+  if(color in window.tinySquare.specialColors) {
+    drawSpecialColor(window.tinySquare.specialColors[color], size);
   }else{
     handleSizeAndColor(size, color);
   }
@@ -152,20 +163,12 @@ function displayColorAndSize(color : string, size : number) {
   withElementById('size-display', (el) => { el.innerText = size.toString() });
 }
 
-function drawPride(size: number) {
+function drawSpecialColor(colors: Array<string>, size: number) {
   const canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('canvas');
   canvas.width = size;
   canvas.height = size;
   const ctx : CanvasRenderingContext2D | null = canvas.getContext('2d', { alpha: false });
   if(ctx) {
-    const colors = 
-      [ "#E70000"
-      , "#FF8C00"
-      , "#FFEF00"
-      , "#00811F"
-      , "#0044FF"
-      , "#760089"
-      ]
     const increment = 1 / colors.length;
     const grd = ctx.createLinearGradient(0,0,0,size);
     for(let i = 0; i < colors.length; i++) {
