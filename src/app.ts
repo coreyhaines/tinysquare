@@ -9,7 +9,7 @@ interface TinySquareConfig {
 interface Window { tinySquare: TinySquareConfig }
 
 window.tinySquare = {
-  defaultColor: "FF6F61",
+  defaultColor: "0F4C81",
   defaultSize : "200",
   color: undefined,
   size: undefined,
